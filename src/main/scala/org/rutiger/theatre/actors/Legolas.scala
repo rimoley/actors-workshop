@@ -18,5 +18,7 @@ class Legolas extends Actor{
 
 object Legolas {
 
-  final case class RecountingEnemies()
+  final case class Attack()
+  final case class Shot(arrows: Int)
+
 }
