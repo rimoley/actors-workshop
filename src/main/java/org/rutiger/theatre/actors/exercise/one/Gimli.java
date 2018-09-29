@@ -1,36 +1,50 @@
 package org.rutiger.theatre.actors.exercise.one;
 
-import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
 import akka.actor.Props;
-import akka.event.Logging;
-import akka.event.LoggingAdapter;
 import org.rutiger.theatre.Messages;
 import org.rutiger.theatre.actors.exercise.Companion;
 
-public class Gimli extends AbstractActor implements Companion {
-    private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-    private Integer counter = 0;
+public class Gimli extends Companion {
+
+    private static final Integer MAX_SWINGING = 3;
+    private ActorRef friend;
+
+    private Gimli(ActorRef friend) {
+        this.friend = friend;
+    }
 
     @Override
     public Receive createReceive() {
+        return onDuty().orElse(commonBehavior());
+    }
+
+    private Receive onDuty() {
         return receiveBuilder()
-                .match(Messages.Attack.class, s -> {
-                    int axeSwung= attackWith(3);
+                .match(Messages.Attack.class, msg -> {
+                    int axeSwung= attackWith(MAX_SWINGING) + extraEffort.get();
                     log.info("swung axe {} times", axeSwung);
                     getSender().tell(new Messages.Shot(axeSwung), getSelf());
+                    if (axeSwung > MAX_SWINGING) {
+                        log.info("too dizzy after {} swings", axeSwung);
+                        getContext().become(tired().orElse(commonBehavior()));
+                    }
                 })
-                .match(Messages.Killed.class, killed -> {
-                    counter += killed.orcs();
-                })
-                .match(Messages.EndBattle.class, any -> {
-                    log.info("Hey i killed {} orcs", counter);
-                    getContext().stop(getSelf());
-                })
-                .matchAny(o -> log.info("received unknown message"))
                 .build();
     }
 
-    public static Props props() {
-        return Props.create(Gimli.class);
+    private Receive tired() {
+        return receiveBuilder()
+                .match(Messages.Attack.class, attack -> {
+                    log.info("Cannot do anything... protect me friend");
+                    friend.forward(attack, getContext());
+                    getContext().become(onDuty().orElse(commonBehavior()));
+                    log.info("I am back!!");
+                })
+                .build();
+    }
+
+    public static Props props(ActorRef friend) {
+        return Props.create(Gimli.class, friend);
     }
 }

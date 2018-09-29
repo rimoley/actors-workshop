@@ -7,6 +7,7 @@ import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import org.rutiger.theatre.Messages;
+import org.rutiger.theatre.actors.exercise.fourth.DunharrowGhost;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -38,6 +39,9 @@ public class Battle extends AbstractActor {
                 })
                 .match(Messages.Swung.class, swung -> {
                     killOrcs(getSender(), swung.axe());
+                })
+                .match(DunharrowGhost.GhostSword.class, sword -> {
+                    killOrcs(getSender(), sword.slashes());
                 })
                 .match(Messages.ReinforcementsArrive.class, spawned -> {
                     log.info("{} orcs join the battle", spawned.orcs());
@@ -78,6 +82,7 @@ public class Battle extends AbstractActor {
     public void postStop() throws Exception {
         attackOrdering.cancel();
         enemiesScheduler.cancel();
+        getContext().getSystem().terminate();
     }
 
     public static Props props(Integer initialEnemyArmy, List<ActorRef> warriors) {

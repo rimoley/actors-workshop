@@ -1,21 +1,16 @@
 package org.rutiger.theatre.actors.exercise.one;
 
-import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
-import akka.event.Logging;
-import akka.event.LoggingAdapter;
 import org.rutiger.theatre.Messages;
 import org.rutiger.theatre.actors.exercise.Companion;
 
 /*
 This class represents a guy that can shots 7 arrows at once. Epicness level over 9k
  */
-public class Legolas extends AbstractActor implements Companion {
-    private static Integer RESTING_TURNS = 3;
+public class Legolas extends Companion {
+    private static Integer RESTING_TURNS = 2;
     private static Integer MAX_ARROWS = 7;
-    private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-    private Integer counter = 0;
     private ActorRef friend;
 
     private Legolas(ActorRef friend) {
@@ -57,16 +52,10 @@ public class Legolas extends AbstractActor implements Companion {
                 .build();
     }
 
-    private Receive commonBehavior() {
-        return receiveBuilder()
-                .match(Messages.Killed.class, killed -> {
-                    counter += killed.orcs();
-                })
-                .match(Messages.EndBattle.class, any -> {
-                    log.info("Hey i killed {} orcs", counter);
-                    getContext().stop(getSelf());
-                })
-                .build();
+    @Override
+    public void postStop() throws Exception {
+        log.info("Before the party, I gotta tell my pal");
+        friend.tell(new Messages.EndBattle(), getSelf());
     }
 
     public static Props props(ActorRef friend) {

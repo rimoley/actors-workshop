@@ -36,6 +36,10 @@ public class DunharrowGhost extends AbstractActor {
                         mysteryErrorBox();
                     }
                 })
+                .match(Messages.Killed.class, killed -> {
+                    log.info("Seems I, {}, killed some enemies, I will tell my liege!!", getSelf().toString());
+                    getContext().parent().tell(killed, getSelf());
+                })
                 .matchAny(anyMsg -> {
                     log.info("bliba bluba blerg!!!! (What are you saying {})", getSender().toString());
                 })
