@@ -26,5 +26,6 @@ object App {
     actorSystem.terminate()
   }
 
+
   final case class Attack()
 }

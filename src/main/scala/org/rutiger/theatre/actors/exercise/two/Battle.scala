@@ -33,7 +33,6 @@ object Battle {
   //TODO Create a props contructor
   def apply = ???
 
-  final case class Attack()
   final case class Killed(enemies: Int)
   final case class ReinforcementsArrive(orcs: Int)
   object EndBattle
