@@ -36,7 +36,6 @@ class Battle(initialEnemyArmy: Int, warriors: List[ActorRef]) extends Actor with
       self ! EndBattle
     }
     enemyArmy -= quantity
-
   }
 
   private implicit val enemiesDispatcher = context.system.dispatcher
