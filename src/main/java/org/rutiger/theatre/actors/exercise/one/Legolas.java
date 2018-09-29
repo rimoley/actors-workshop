@@ -27,7 +27,7 @@ public class Legolas extends AbstractActor implements Companion {
         return onDuty().orElse(commonBehavior());
     }
 
-    public Receive onDuty() {
+    private Receive onDuty() {
         return receiveBuilder()
                 .match(Messages.Attack.class, msg -> {
                     int arrowsShot = attackWith(MAX_ARROWS);
