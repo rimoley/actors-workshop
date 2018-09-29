@@ -1,34 +1,39 @@
 package org.rutiger.theatre.actors.exercise.one
 
-import akka.actor.{Actor, ActorLogging, Props}
+import akka.actor.{ActorRef, Props}
 import org.rutiger.theatre.App.Attack
 import org.rutiger.theatre.actors.exercise.Companion
 import org.rutiger.theatre.actors.exercise.one.Gimli.Swung
-import org.rutiger.theatre.actors.exercise.two.Battle.{EndBattle, Killed}
 
-class Gimli extends Actor with ActorLogging with Companion {
+class Gimli(friend: ActorRef) extends Companion {
   private val MAX_SWINGING = 3
 
-  private var counter = 0
+  override def receive: Receive = onDuty.orElse(commonBehavior)
 
-  override def receive: Receive = {
+  def onDuty: Receive = {
     case Attack => {
       log.info("Swinging my axe")
-      sender() ! Swung(attackWith(MAX_SWINGING))
+      val currentAttack = attackWith(MAX_SWINGING) + extraEffort()
+      sender() ! Swung(currentAttack)
+      if (currentAttack > 3) {
+        log.info("too dizzy after {} swings", currentAttack)
+        context.become(tired)
+      }
     }
-    case Killed(orcs) => counter += orcs
-    case EndBattle => {
-      log.info("Hey I killed {}", counter)
-      context.stop(self)
-    }
-    case _ => {
-      log.warning("Me dont understand")
+  }
+
+  def tired: Receive = {
+    case Attack => {
+      log.info("Cannot do anything... protect me friend")
+      friend forward Attack
+      context.become(onDuty.orElse(commonBehavior))
+      log.info("I am back!!!")
     }
   }
 }
 
 object Gimli {
   final case class Swung(axe: Int)
-  def apply: Props = Props[Gimli]
+  def apply(friend: ActorRef): Props = Props(classOf[Gimli], friend)
 }
 

@@ -2,6 +2,7 @@ package org.rutiger.theatre.actors.exercise.two
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import org.rutiger.theatre.App.Attack
 import org.rutiger.theatre.actors.exercise.Companion
+import org.rutiger.theatre.actors.exercise.fourth.DunharrowGhost.GhostSword
 import org.rutiger.theatre.actors.exercise.one.Gimli.Swung
 import org.rutiger.theatre.actors.exercise.one.Legolas.Shot
 import org.rutiger.theatre.actors.exercise.two.Battle.{EndBattle, Killed, ReinforcementsArrive}
@@ -21,6 +22,7 @@ class Battle(initialEnemyArmy: Int, warriors: List[ActorRef]) extends Actor with
     }
     case Shot(arrows) => killOrcs(sender(), arrows)
     case Swung(axe) => killOrcs(sender(), axe)
+    case GhostSword(slashes) => killOrcs(sender(), slashes)
     case Attack => Random.shuffle(warriors).foreach( _ ! Attack)
     case EndBattle => {
       warriors.foreach(_ ! EndBattle)

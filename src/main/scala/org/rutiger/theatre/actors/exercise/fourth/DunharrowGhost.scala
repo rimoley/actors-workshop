@@ -3,6 +3,7 @@ package org.rutiger.theatre.actors.exercise.fourth
 import akka.actor.{Actor, ActorLogging, PoisonPill}
 import org.rutiger.theatre.App.Attack
 import org.rutiger.theatre.actors.exercise.fourth.DunharrowGhost.GhostSword
+import org.rutiger.theatre.actors.exercise.two.Battle.Killed
 
 import scala.util.Random
 
@@ -17,6 +18,10 @@ class DunharrowGhost extends Actor with ActorLogging {
         case true => sender() ! GhostSword(r.nextInt(MAX_SLASHES) + 1)
         case false => mysteryErrorBox()
       }
+    }
+    case msg: Killed => {
+      log.info("Seems I, {}, killed some enemies, I will tell my liege!!", self.toString())
+      context.parent ! msg
     }
     case _ => log.info("bliba bluba blerg!!!! (What are you saying {})", sender().toString())
   }

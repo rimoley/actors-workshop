@@ -9,7 +9,6 @@ import org.rutiger.theatre.actors.exercise.two.Battle.{EndBattle, Killed}
 class Legolas(friend: ActorRef) extends Actor with ActorLogging with Companion {
 
   private val MAX_ARROWS = 7
-  private var counter = 0
 
   override def receive: Receive = onDuty.orElse(commonBehavior)
 
@@ -37,12 +36,9 @@ class Legolas(friend: ActorRef) extends Actor with ActorLogging with Companion {
     }
   }
 
-  def commonBehavior: Receive = {
-    case Killed(orcs) => counter += orcs
-    case EndBattle => {
-      log.info("Hey I killed {}", counter)
-      context.stop(self)
-    }
+  override def postStop(): Unit = {
+    log.info("Before the party, i gotta tell my pal")
+    friend ! EndBattle
   }
 }
 
