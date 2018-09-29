@@ -62,7 +62,7 @@ class Battle(initialEnemyArmy: Int, warriors: List[ActorRef]) extends Actor with
     enemiesScheduler.cancel()
     attackOrdering.cancel()
     context.system.terminate()
-  }
+ }
 }
 
 object Battle {
