@@ -7,12 +7,7 @@ This class represents a guy that can shots 5 arrows at once. Epicness level over
  */
 class Legolas extends Actor{
 
-  /*
-  1) Create couple of message that the actor will receive
-  2) Modify receive function to treat those messages and print some message
-  3) Create Gimli Actor, with a couple of messages
-  4) Legolas and Gimli should know each other? Select to use constructor or message block
-   */
+  //TODO Receive Attack message and send a randome number of arrows, tops to 5.
   override def receive: Receive = ???
 }
 
