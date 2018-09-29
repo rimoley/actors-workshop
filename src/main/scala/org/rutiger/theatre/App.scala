@@ -20,7 +20,6 @@ object App {
     val battle: ActorRef = actorSystem.actorOf(Battle(100, List(legolas, gimli)))
 
     Await.result(actorSystem.whenTerminated, 60 seconds)
-
   }
 
 
