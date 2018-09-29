@@ -10,4 +10,6 @@ object App {
   5) Run it
    */
   def main(args: Array[String]): Unit = ???
+
+  final case class Attack()
 }
