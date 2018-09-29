@@ -48,6 +48,5 @@ class Legolas(friend: ActorRef) extends Actor with ActorLogging with Companion {
 
 object Legolas {
   def apply(friend: ActorRef): Props = Props(classOf[Legolas], friend)
-  def apply: Props = Props[Legolas]
   final case class Shot(arrows: Int)
 }
