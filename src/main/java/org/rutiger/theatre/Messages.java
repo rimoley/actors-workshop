@@ -24,4 +24,28 @@ public class Messages {
             return axe;
         }
     }
+
+    public static class Killed {
+        private Integer orcs;
+        public Killed(Integer orcs) {
+            this.orcs = orcs;
+        }
+
+        public Integer orcs() {
+            return orcs;
+        }
+    }
+
+    public static class ReinforcementsArrive {
+        private Integer orcs;
+        public ReinforcementsArrive(Integer orcs) {
+            this.orcs = orcs;
+        }
+
+        public Integer orcs() {
+            return orcs;
+        }
+    }
+
+    public static class EndBattle {}
 }
