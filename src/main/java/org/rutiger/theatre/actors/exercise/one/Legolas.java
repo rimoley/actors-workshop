@@ -54,6 +54,10 @@ public class Legolas extends AbstractActor implements Companion {
                         getContext().become(tired(waiting - 1).orElse(commonBehavior()));
                     }
                 })
+                .match(Messages.EndBattle.class, any -> {
+                    log.info("Hey i killed {} orcs", counter);
+                    getContext().stop(getSelf());
+                })
                 .build();
     }
 
