@@ -14,7 +14,7 @@ class BattleScribe extends Actor with ActorLogging {
   override def preStart(): Unit = ???
 
   //TODO unhook it
-  override def aroundPostStop(): Unit = ???
+  override def postStop(): Unit = ???
 }
 
 
