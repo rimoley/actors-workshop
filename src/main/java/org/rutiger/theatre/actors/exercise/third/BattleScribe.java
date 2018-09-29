@@ -2,6 +2,7 @@ package org.rutiger.theatre.actors.exercise.third;
 
 import akka.actor.AbstractActor;
 import akka.actor.DeadLetter;
+import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.japi.pf.ReceiveBuilder;
@@ -32,5 +33,9 @@ public class BattleScribe extends AbstractActor {
     @Override
     public void postStop() throws Exception {
         getContext().getSystem().eventStream().unsubscribe(getSelf());
+    }
+
+    public static Props props() {
+        return Props.create(BattleScribe.class);
     }
 }
