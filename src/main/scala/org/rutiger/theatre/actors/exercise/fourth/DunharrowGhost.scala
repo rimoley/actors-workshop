@@ -1,7 +1,7 @@
 package org.rutiger.theatre.actors.exercise.fourth
 
 import akka.actor.{Actor, ActorLogging, PoisonPill}
-import org.rutiger.theatre.actors.Legolas.Attack
+import org.rutiger.theatre.App.Attack
 import org.rutiger.theatre.actors.exercise.fourth.DunharrowGhost.GhostSword
 
 import scala.util.Random
