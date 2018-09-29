@@ -43,12 +43,11 @@ public class DunharrowGhost extends AbstractActor {
     }
 
     private void mysteryErrorBox() {
-        Integer errorResult = (int)(now() % 4);
+        Integer errorResult = (int)(now() % 3);
         switch(errorResult) {
             case 0: throw new IllegalStateException("Ghost overflow");
             case 1: getSelf().tell(PoisonPill.getInstance(), getSelf());
             case 2: getContext().stop(getSelf());
-            case 3: getContext().getSystem().stop(getSelf());
         }
     }
 
