@@ -74,6 +74,12 @@ public class Battle extends AbstractActor {
                     Duration.ofSeconds(1), getSelf(), new Messages.Attack(),
                     getContext().getSystem().dispatcher(), ActorRef.noSender());
 
+    @Override
+    public void postStop() throws Exception {
+        attackOrdering.cancel();
+        enemiesScheduler.cancel();
+    }
+
     public static Props props(Integer initialEnemyArmy, List<ActorRef> warriors) {
         return Props.create(Battle.class, initialEnemyArmy, warriors);
     }
