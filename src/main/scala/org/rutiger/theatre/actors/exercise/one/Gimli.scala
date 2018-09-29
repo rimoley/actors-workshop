@@ -6,7 +6,6 @@ import org.rutiger.theatre.actors.exercise.Companion
 import org.rutiger.theatre.actors.exercise.one.Gimli.Swung
 import org.rutiger.theatre.actors.exercise.two.Battle.{EndBattle, Killed}
 
-
 class Gimli extends Actor with ActorLogging with Companion {
   private val MAX_SWINGING = 3
 
