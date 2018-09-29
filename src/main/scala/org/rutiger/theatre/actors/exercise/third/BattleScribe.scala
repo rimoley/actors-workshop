@@ -1,20 +1,23 @@
 package org.rutiger.theatre.actors.exercise.third
 
 import akka.actor.{Actor, ActorLogging, DeadLetter, Props}
+import akka.event.Logging.Info
 
 class BattleScribe extends Actor with ActorLogging {
 
-  //TODO assign some event stream
-  val eventStream = ???
+  val eventStream = context.system.eventStream
 
-  //TODO map Deadletter messages
-  def receive = ???
+  def receive = {
+    case DeadLetter(message, sender, receiver) => {
+      val msg = s"Cannot deliver message [${message.getClass.getName}] from $sender to $receiver"
+      log.warning("BATTLE LOG => {}", msg)
+      eventStream.publish(Info(receiver.path.toString, receiver.getClass, msg))
+    }
+  }
 
-  //TODO hook the actor to listen to Deadletter messages
-  override def preStart(): Unit = ???
+  override def preStart(): Unit = eventStream.subscribe(self, classOf[DeadLetter])
 
-  //TODO unhook it
-  override def postStop(): Unit = ???
+  override def postStop(): Unit = eventStream.unsubscribe(self)
 }
 
 

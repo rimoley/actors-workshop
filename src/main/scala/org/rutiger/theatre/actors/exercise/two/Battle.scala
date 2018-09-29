@@ -23,11 +23,8 @@ class Battle(initialEnemyArmy: Int, warriors: List[ActorRef]) extends Actor with
     case Swung(axe) => killOrcs(sender(), axe)
     case Attack => Random.shuffle(warriors).foreach( _ ! Attack)
     case EndBattle => {
-      enemiesScheduler.cancel()
-      attackOrdering.cancel()
       warriors.foreach(_ ! EndBattle)
       context.stop(self)
-      context.system.terminate()
     }
   }
 
@@ -60,6 +57,12 @@ class Battle(initialEnemyArmy: Int, warriors: List[ActorRef]) extends Actor with
       1 seconds,
       self,
       Attack)
+  }
+
+  override def postStop(): Unit = {
+    enemiesScheduler.cancel()
+    attackOrdering.cancel()
+    context.system.terminate()
   }
 }
 
