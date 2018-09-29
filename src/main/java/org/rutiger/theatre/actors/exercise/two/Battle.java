@@ -1,4 +1,4 @@
-package org.rutiger.theatre.actors;
+package org.rutiger.theatre.actors.exercise.two;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;

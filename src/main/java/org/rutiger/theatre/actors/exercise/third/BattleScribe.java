@@ -1,4 +1,4 @@
-package org.rutiger.theatre.actors;
+package org.rutiger.theatre.actors.exercise.third;
 
 import akka.actor.AbstractActor;
 import akka.event.Logging;
