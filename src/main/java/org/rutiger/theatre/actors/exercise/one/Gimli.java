@@ -6,20 +6,18 @@ import akka.event.LoggingAdapter;
 import org.rutiger.theatre.Messages;
 import org.rutiger.theatre.actors.exercise.Companion;
 
-/*
-This class represents a guy that can shots 5 arrows at once. Epicness level over 9k
- */
-public class Legolas extends AbstractActor implements Companion {
+public class Gimli extends AbstractActor implements Companion {
     private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 
     @Override
     public Receive createReceive() {
         return receiveBuilder()
                 .match(Messages.Attack.class, s -> {
-                    int arrowsShot = attackWith(5);
-                    log.info("shot {} arrows", arrowsShot);
-                    getSender().tell(new Messages.Shot(arrowsShot), getSelf());
+                    int axeSwung= attackWith(3);
+                    log.info("swung axe {} times", axeSwung);
+                    getSender().tell(new Messages.Swung(axeSwung), getSelf());
                 })
+                .matchAny(o -> log.info("received unknown message"))
                 .build();
     }
 }

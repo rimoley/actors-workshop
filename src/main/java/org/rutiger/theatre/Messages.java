@@ -13,4 +13,15 @@ public class Messages {
             return arrows;
         }
     }
+
+    public static class Swung {
+        private Integer axe;
+        public Swung(Integer axe) {
+            this.axe = axe;
+        }
+
+        public Integer axe() {
+            return axe;
+        }
+    }
 }
